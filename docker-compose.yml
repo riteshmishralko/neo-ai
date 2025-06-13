@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  sentibot:
+    build: .
+    ports:
+      - "9000:9000"
+    env_file:
+      - environment.list
+    volumes:
+      - ./app/config:/sentibot/app/config
+      - ./tmp:/tmp
