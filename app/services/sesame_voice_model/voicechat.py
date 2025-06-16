@@ -10,8 +10,8 @@ import platform
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
-# model_id = "sesame/csm-1b"
-model_dir = "eustlb/csm-1b"
+model_dir = "sesame/csm-1b"
+# model_dir = "eustlb/csm-1b"
 
 # model_dir = "csm-finetuned-custom-voice" 
 

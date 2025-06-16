@@ -6,11 +6,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     DEBIAN_FRONTEND=noninteractive
 
 # Install system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get update && apt upgrade -y
+
+RUN apt-get install -y --no-install-recommends \
+    portaudio19-dev \
     build-essential \
+    gcc \
+    libffi-dev \
+    libssl-dev \
     ffmpeg \
-    git \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
@@ -21,6 +25,9 @@ WORKDIR /neo-ai
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN huggingface-cli login --token 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
+
+
 # Copy the rest of the application code
 COPY . .
 
@@ -28,7 +35,7 @@ COPY . .
 # COPY environment.list .env
 
 # Expose the port your FastAPI app runs on
-EXPOSE 9000
+EXPOSE 8000
 
 # Start the FastAPI application using Uvicorn
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9000", "--forwarded-allow-ips", "*", "--workers", "1"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--forwarded-allow-ips", "*", "--workers", "1"]
