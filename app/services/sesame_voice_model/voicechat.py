@@ -6,6 +6,7 @@ import tempfile
 import os
 import subprocess
 import platform
+from app.services.vv.vv import VIV ,VVSupabase
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -102,10 +103,15 @@ async def handle_voice_ws(websocket):
                     os.remove(wav_path)
 
             # Only continue if user_text was recognized
-            response_text = openai_gpt_conversation(conversation)
-            conversation.append({"role": "assistant", "content": response_text})
-            print(f"Bot: {response_text}")
-            await websocket.send_json({"type": "bot_text", "text": response_text})
+            # response_text = openai_gpt_conversation(conversation)
+            # conversation.append({"role": "assistant", "content": response_text})
+            # print(f"Bot: {response_text}")
+
+            vv_chat = VIV(user_id="mehar")
+            vv_chat._upload_message(message=user_text, sender="user")
+            response_text = vv_chat.bot_reply(user_text)
+            print("bot reply = ", response_text.get('gpt_response').get('reply'))
+            await websocket.send_json({"type": "bot_text", "text": response_text.get('gpt_response').get('reply')})
 
             # TTS (CSM), stream audio as it's synthesized
             csm_conversation = [

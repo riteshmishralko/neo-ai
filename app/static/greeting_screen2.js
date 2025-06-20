@@ -170,7 +170,10 @@ function GreetingScreen2({ showDropdown, setShowDropdown, onDownload, onUpload, 
 
   // ---- WebSocket & Audio logic ----
   React.useEffect(() => {
-    ws.current = new WebSocket(`ws://${location.host}/ws?user_id=${userId}`);
+    var protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    console.log("protocol");
+    console.log(protocol);
+    ws.current = new WebSocket(`${protocol}://${location.host}/ws?user_id=${userId}`);
     ws.current.binaryType = "arraybuffer";
 
     ws.current.onopen = () => {
